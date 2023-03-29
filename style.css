@@ -1,0 +1,251 @@
+@charset "utf-8";
+/* CSS Document */
+* {
+  background-color: #ffffff;
+	max-height: 75%;
+}
+
+body {
+  background-color: #222222;
+  width: 80%;
+  height: 90%;
+   padding: 45px 125px;
+  margin: 10% auto;
+  border: solid white;
+  border-radius: 25px;
+
+	transition: 0.25s ease-in-out;
+	font-family: 'VT323', monospace;
+}
+
+
+h1 { font-family: Consolas, monaco, monospace; font-size: 24px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 26.4px; } h3, button { font-family: Consolas, monaco, monospace; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 700; line-height: 15.4px; } p { font-family: Consolas, monaco, monospace; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 20px; } blockquote { font-family: Consolas, monaco, monospace; font-size: 21px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 30px; } pre { font-family: Consolas, monaco, monospace; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; line-height: 18.5714px; }
+
+p {
+  color: white;
+  background-color: #222222;
+  text-transform: lowercase;
+  text-align: justify;
+  line-height: 1.5;
+  letter-spacing: 1.5px;
+  overflow: hidden;
+  
+}
+
+p:after {
+	content:"_";
+	opacity: 0;
+	animation: cursor 1s infinite;
+}
+@keyframes cursor {
+	0% {
+		opacity: 0;
+	}
+	40% {
+		opacity: 0;
+	}
+	50% {
+		opacity: 1;
+	}
+	90% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+
+div {
+  background-color: #222222;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  flex-align: space-between;
+}
+
+div.button-row {
+	flex-align: space-evenly;
+}
+
+div.header {
+	display: flex;
+	align-items: center;
+}
+
+
+#title {
+  color: white;
+  background-color: #222222;
+  padding: 0px 0px 25px 0px;
+  transition: all 1s;
+  position: relative;
+	bottom: 1.75rem;
+	left: 3.5rem;
+	font-family: 'VT323', monospace;
+	text-transform: uppercase;
+	letter-spacing: .125rem;
+	text-align: center;
+	flex-grow: 1;
+}
+
+#speedctrl:hover {
+  position: relative;
+	bottom: 2.45rem;
+	left: 7.55rem;
+  height: 30px;
+  width: 200px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+	background-color: #222222;
+}
+
+#speedctrl {
+	position: relative;
+	bottom: 2.5rem;
+	left: 14rem;
+  height: 30px;
+  width: 200px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+	background-color: transparent;
+}
+
+span {
+	background-color: #222222;
+	color: white;
+}
+
+#speedtext {
+  margin-right: 10px;
+	text-align: end;
+}
+
+
+.slider-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  margin: 0 20px;
+  visibility: hidden;
+}
+
+.slider-input {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 2px;
+  background-color: #ddd;
+  outline: none;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.slider-input:hover {
+  opacity: 1;
+	transition: opacity 0.2s;
+}
+
+.slider-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background-color: #007bff;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.slider-thumb {
+  position: absolute;
+  top: -8px;
+  left: calc(50% - 10px);
+  width: 20px;
+  height: 20px;
+  background-color: #007bff;
+  border-radius: 50%;
+  pointer-events: none;
+  transition: transform 0.2s;
+}
+
+.slider-input:focus + .slider-thumb {
+  transform: scale(1.2);
+}
+
+.slider-input::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background-color: #007bff;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+#speedctrl:hover #speedtext {
+  transform: translateX(-60px);
+}
+
+#speedctrl:hover .slider-container {
+  visibility: visible;
+  transition: visibility 0s linear 0s;
+}
+
+#speedctrl:hover .slider-thumb {
+  visibility: hidden;
+}
+
+
+
+
+
+button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 15px 20px;
+        border-radius: 5px;
+        font-size: 20px;
+        margin: 50px 25px 25px 25px;
+        width: 12.5%;
+        transition: 0.125s ease-in-out;
+		animation: 1s ease-in;
+		display: none;
+		position: relative;
+		top: 1.75rem;
+      }
+
+button:hover {
+	background-color: darkgray;
+	transition: 0.0125s ease-in-out;
+}
+
+
+
+img.control {
+  display: inline-block;
+  position: relative;
+  bottom: 2rem;
+	right: 6.5rem;
+  background-color: transparent;
+  width: 4.5rem;
+	height: 4.5rem;
+	filter: invert();
+	visibility: hidden;
+	margin-right: auto;
+}
+img.control:hover {
+	filter: none;
+	transition: 0.0125s ease-in-out;
+}
+
+.fade {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+
+
+
+
+

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Adventure Game</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="style.css">
+	<script src="game.js" async></script>
+</head>
+<body>
+  <div class="header">
+    <img src="back.png" alt="back" class="control" id="back">
+	  <h1 id="title">Cyberpunk Adventure Game</h1>
+	  <div id="speedctrl">
+  <span id="speedtext">Speed: <span id="speedvalue">45</span></span>
+  <div class="slider-container">
+    <input type="range" min="0" max="100" value="45" class="slider-input" oninput="updateValue(this.value)"/>
+    <div class="slider-thumb"></div>
+  </div>
+</div>
+
+
+	  
+  </div>
+    <p class="prompt" id="prompt"></p>
+  <div class="button-row">
+    <button id="start" >Start Journey</button>
+    <button id="continue">Continue</button>
+    <button class="options" id="option-1" visibility="hidden"></button>
+    <button class="options" id="option-2" visibility="hidden"></button>
+    <button class="options" id="option-3" visibility="hidden"></button>
+  </div>
+</body>
+</html>
