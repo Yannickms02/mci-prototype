@@ -1,26 +1,17 @@
-/*eslint-env es6*/
-/*
-let i = 0;
-let txt = 'You are a skilled hacker and information broker living in the sprawling megacity of Neo-Tokyo. Your day-to-day life is filled with danger and intrigue as you navigate the complex web of corporate espionage and political intrigue that defines the city.'; 
-let prompt1 = "One day, you are approached by a mysterious client who offers you a job that could change everything. They want you to infiltrate the secure network of a powerful corporation and steal sensitive data that could bring them down. The pay is high, but the risks are even higher - if you're caught, you'll face the full wrath of the corporation and its allies."
-const prompt1_continuation = "You weigh the risks and rewards of this job carefully. You've hacked into corporate networks before, but this would be a big score. On the other hand, getting caught would mean more than just getting thrown in jail - it could mean being disappeared entirely. What do you do?";
-let speed = 55; 
-*/
 const prompt = document.getElementById("prompt")
 const startButton = document.getElementById("start");
 const contButton = document.getElementById("continue");
 const backButton = document.getElementById("back");
 const option1Button = document.getElementById("option-1");
 const option2Button = document.getElementById("option-2");
-const option3Button = document.getElementById("option-3");
+const skipButton = document.getElementById("skip");
+skipButton.textContent = "Skip animation ..."
 let speed = 55; // default animation speed value (delay in ms)
 
 function updateValue(value) {
   var speedtext = document.getElementById("speedvalue");
   speedtext.textContent = value;
 	speed = 100-value; // inverted speed value
-  // Führen Sie eine JavaScript-Aktion im Hintergrund aus, wenn sich der Wert ändert
-  // TODO: Fügen Sie hier Ihre Aktion ein
 }
 
 
@@ -210,64 +201,92 @@ let currentPrompt = 0;
 let prevPrompt = null;
 
 function displayPrompt(promptIndex) {
+	
+	// disable all buttons upon showing prompt
+	function disableButtons() {
+		startButton.style.display = "none";
+		contButton.style.display = "none";
+		skipButton.style.display = "none";
+		option1Button.style.display = "none";
+		option2Button.style.display = "none";
+	  }
+	disableButtons();
   // update prevPrompt to the current prompt index
   prevPrompt = currentPrompt;
 
   // update currentPrompt to the new prompt index
   currentPrompt = promptIndex;
-	if (currentPrompt == 0) {
-		backButton.style.visibility = "hidden";
-	}
-  if (currentPrompt == 1) {
-    startButton.style.display = "none";
+  const buttons = prompts[currentPrompt].buttons;
+
+  if (currentPrompt == 0) {
+    backButton.style.visibility = "hidden";
   }
-  if (prompts[prevPrompt].buttons[0].text == "Continue") {
-    contButton.style.display = "none";
-  }
+
 
 
   // display the text for the current prompt
-  //prompt.textContent = prompts[currentPrompt].text;
   let i = 0;
   let text = prompts[currentPrompt].text;
 
+
+  // function to show buttons
+  function showButtons() {
+	disableButtons();
+	  if (prompts[currentPrompt].buttons[0].text == "Continue") {
+      contButton.style.display = "block";
+    } else if (currentPrompt == 0) {
+		//contButton.style.display = "none";
+       
+        startButton.style.display = "block";
+      }
+      else {
+		// display the buttons for the current prompt
+		option1Button.style.display =
+		buttons.length > 0 
+		? "block"
+		: "none";
+		option2Button.style.display = buttons.length > 1 ? "block" : "none";
+		option1Button.textContent = buttons.length > 0 ? buttons[0].text : "";
+		option2Button.textContent = buttons.length > 1 ? buttons[1].text : "";
+	  }
+  }
+  // function to stop the prompt
+  function stopPrompt() {
+    clearTimeout(timer);
+	  prompt.textContent = "root@kali:~# "+prompts[currentPrompt].text;
+	  showButtons();
+  }
+
+  // function to type out the text
   function typeWriter() {
     if (i == 0) {
       prompt.textContent = "root@kali:~# ";
     }
+    if (i == 5 && currentPrompt > 0) {
+      skipButton.style.display = "block";
+    }
+    if (i == text.length - 5) {
+      skipButton.style.display = "none";
+    }
     if (i < text.length) {
       prompt.textContent += text.charAt(i);
       i++;
-      setTimeout(typeWriter, speed);
-    } else if (prompts[currentPrompt].buttons[0].text == "Continue") {
-      contButton.style.display = "block";
-    } else {
-      if (currentPrompt == 0) {
-        startButton.style.display = "block";
-      } else {
-        startButton.style.display = "none";
-      }
-      contButton.style.display = "none";
-      // display the buttons for the current prompt
-      const buttons = prompts[currentPrompt].buttons;
-      option1Button.style.display = buttons.length > 0 && buttons[0].text != "Continue" && buttons[0].text != "Start Journey" ? "block" : "none";
-      option2Button.style.display = buttons.length > 1 ? "block" : "none";
-      option3Button.style.display = buttons.length > 2 ? "block" : "none";
-      option1Button.textContent = buttons.length > 0 && buttons[0].text != "Continue" && buttons[0].text != "Start Journey" ? buttons[0].text : "";
-      option2Button.textContent = buttons.length > 1 ? buttons[1].text : "";
-      option3Button.textContent = buttons.length > 2 ? buttons[2].text : "";
-    }
+      timer = setTimeout(typeWriter, speed);
+    } else { showButtons() }
   }
-  typeWriter();
 
+  // add event listener to skipButton to stop the prompt
+  skipButton.addEventListener("click", stopPrompt);
+  backButton.addEventListener("click", () => {
+	stopPrompt();
+	disableButtons();
+  });
+  
 
+  // start typing out the text
+  let timer = setTimeout(typeWriter, speed);
 }
 
-function displayPrevPrompt() {
-  if (prevPrompt !== null) {
-    displayPrompt(prevPrompt);
-  }
-}
 
 // add event listeners for buttons
 startButton.addEventListener("click", () => {
@@ -280,7 +299,12 @@ contButton.addEventListener("click", () => {
   displayPrompt(nextPrompt);
 });
 
-backButton.addEventListener("click", displayPrevPrompt);
+backButton.addEventListener("click", () => {
+	if (currentPrompt > 0) {
+		displayPrompt(currentPrompt-1);
+		showButtons();
+	}
+});
 
 option1Button.addEventListener("click", () => {
   const nextPrompt = prompts[currentPrompt].buttons[0].next;
@@ -296,54 +320,9 @@ option2Button.addEventListener("click", () => {
 	option2Button.style.display = "none";
 });
 
-option3Button.addEventListener("click", () => {
-  const nextPrompt = prompts[currentPrompt].buttons[2].next;
-  displayPrompt(nextPrompt);
+skipButton.addEventListener("click", () => {
+  prompt.textContent = prompts[currentPrompt].text
 });
 
 // display the first prompt on page load
 displayPrompt(0);
-
-
-/*
-// introduction to story
-startButton.addEventListener("click", function typeWriter() {
-  if (i < txt.length) {
-    prompt.innerHTML += txt.charAt(i);
-    i++;
-    setTimeout(typeWriter, speed);
-  } else {
-    contButton.style.display = "block";
-    i = 0;
-  }
-  startButton.style.display = "none";
-})
-
-// first prompt
-let run = true;
-contButton.addEventListener("click", function typeWriter() {
-  if (i == 0) {
-    prompt.innerHTML += "<br><br>";
-  }
-  if (i < prompt1.length) {
-    prompt.innerHTML += prompt1.charAt(i);
-    i++;
-    setTimeout(typeWriter, speed);
-  } 
-  if (i == prompt1.length && run) {
-    i = 0;
-    prompt1 = prompt1_continuation;
-    run = false;
-    setTimeout(typeWriter, 2000);
-  }
-  else if (!run && i == prompt1.length) {
-    option_1_button.style.display = "block";
-    option_1_button.innerHTML = "Take the job";
-    option_2_button.style.display = "block";
-    option_2_button.innerHTML = "Reject offer";
-  }
-  contButton.style.display = "none";
-})
-
-//-- Option 1 -- take the job
-*/
